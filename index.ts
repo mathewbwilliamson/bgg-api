@@ -3,11 +3,15 @@ import axios from 'axios';
 import parser, { X2jOptions } from 'fast-xml-parser';
 import he from 'he';
 import {BoardGameItem} from './types/BoardGameItems'
+import bodyParser from 'body-parser';
+import models, { connectDb } from './models';
+import { BggUser } from './models/BggUser';
 
 require('dotenv').config();
 
 const app = express();
 const port = process.env.PORT || '8000';
+app.use(bodyParser.urlencoded({ extended: true }))
 
 const parseBoardgameItem = (item: any) => {
     return {
@@ -118,9 +122,8 @@ app.get('/', async (req, res) => {
     res.status(200).send('this is for BGG' + collectionStatus);
 });
 
-/**
- * Server Activation
- */
-app.listen(port, () => {
-    console.log(`Listening to requests on http://localhost:${port}`);
-});
+connectDb().then(async () => {
+    app.listen(port, () =>
+      console.log(`App listening on port ${port}!`),
+    );
+  });
