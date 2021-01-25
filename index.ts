@@ -4,6 +4,8 @@ import parser, { X2jOptions } from 'fast-xml-parser';
 import he from 'he';
 import {BoardGameItem} from './types/BoardGameItems'
 
+require('dotenv').config();
+
 const app = express();
 const port = process.env.PORT || '8000';
 

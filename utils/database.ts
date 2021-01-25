@@ -1,6 +1,6 @@
 import { MongoClient} from 'mongodb';
 
-const uri = `mongodb+srv://admin-persional-user:<password>@basicpersonal.qv7dc.mongodb.net/<dbname>?retryWrites=true&w=majority`
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@basicpersonal.qv7dc.mongodb.net/<dbname>?retryWrites=true&w=majority`
 
 const mongoClient = new MongoClient(uri, { useNewUrlParser: true });
 
