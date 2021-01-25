@@ -1,24 +1,12 @@
-/**
- * Required External Modules
- */
 import express from 'express';
 import axios from 'axios';
 import parser, { X2jOptions } from 'fast-xml-parser';
 import he from 'he';
 import {BoardGameItem} from './types/BoardGameItems'
-/**
- * App Variables
- */
+
 const app = express();
 const port = process.env.PORT || '8000';
 
-/**
- *  App Configuration
- */
-
-/**
- * Routes Definitions
- */
 const parseBoardgameItem = (item: any) => {
     return {
         objectId: item.attr['@_objectid'],
