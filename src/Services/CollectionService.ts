@@ -77,7 +77,6 @@ export const getCollection = async (username: string) => {
         throw new Error(jsonCollection?.errors?.error?.message);
     }
 
-    console.log('\x1b[41m%s \x1b[0m', '[matt] jsonCollection', jsonCollection);
     if (jsonCollection && !!jsonCollection?.message) {
         // [matt] Need to do retries for this. Maybe a redis job??
         return new Error('They are timing us out');
