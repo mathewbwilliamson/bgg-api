@@ -3,29 +3,29 @@ import bodyParser from 'body-parser';
 import { NextFunction } from 'express';
 import { createExpressServer } from 'routing-controllers';
 import { CollectionController } from './src/Controllers/CollectionController';
-import { connectDb } from './src/models';
 import dotenv from 'dotenv';
+import { createConnection } from 'typeorm';
 
 dotenv.config();
 
-const port = process.env.PORT || '8000';
+createConnection().then((connection) => {
+    const port = process.env.PORT || '8000';
 
-// creates express app, registers all controller routes and returns you express app instance
-const app = createExpressServer({
-    cors: true,
-    controllers: [CollectionController], // we specify controllers we want to use
-});
+    // creates express app, registers all controller routes and returns you express app instance
+    const app = createExpressServer({
+        cors: true,
+        controllers: [CollectionController], // we specify controllers we want to use
+    });
 
-app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use((err: Error, req: Express.Request, res: any, next: NextFunction) => {
-    if (res.headersSent) {
-        return next(err);
-    }
-    res.status(500);
-    console.log('\x1b[43m%s \x1b[0m', 'ERROR', err);
-});
+    app.use((err: Error, req: Express.Request, res: any, next: NextFunction) => {
+        if (res.headersSent) {
+            return next(err);
+        }
+        res.status(500);
+        console.log('\x1b[43m%s \x1b[0m', 'ERROR', err);
+    });
 
-connectDb().then(async () => {
     app.listen(port, () => console.log(`App listening on port ${port}!`));
 });

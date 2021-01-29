@@ -1,9 +1,7 @@
 import axios from 'axios';
 import parser, { X2jOptions } from 'fast-xml-parser';
 import he from 'he';
-import { BggBoardgameItem, BoardGameItemDocument } from '../Models/BggBoardgameItem';
 import { BoardGameItem } from '../../types/BoardGameItems';
-import { models } from 'mongoose';
 
 const xmlOptions: Partial<X2jOptions> = {
     attributeNamePrefix: '@_',
@@ -105,6 +103,7 @@ export const getCollection = async (username: string) => {
         //         boardgameObject[parsedItem.objectId] = { ...parsedItem };
         //     }
         // });
+        const boardGameArray: any[] = [];
         let count = 0;
         for (const item of jsonCollection.items.item) {
             if (count === 600 || count === 50 || count === 100 || count === 200 || count === 500) {
@@ -113,23 +112,32 @@ export const getCollection = async (username: string) => {
                 // console.log('PARSED ITEM', parseBoardgameItem(item));
                 // console.log('RATING', item.stats.rating.ranks.rank);
                 const parsedItem = parseBoardgameItem(item);
-                console.log('\x1b[41m%s \x1b[0m', '[matt] parsedItem', parsedItem);
-                const two = await new models.BggBoardgameItem({
+                boardGameArray.push({
                     objectId: parsedItem.objectId,
                     name: parsedItem.name,
                     yearPublished: parsedItem.yearPublished,
                     image: parsedItem.image,
                     thumbnail: parsedItem.thumbnail,
                 });
+                // console.log('\x1b[41m%s \x1b[0m', '[matt] parsedItem', parsedItem);
+                // const two = await new models.BggBoardgameItem({
+                //     objectId: parsedItem.objectId,
+                //     name: parsedItem.name,
+                //     yearPublished: parsedItem.yearPublished,
+                //     image: parsedItem.image,
+                //     thumbnail: parsedItem.thumbnail,
+                // });
+                // two.collection.save();
 
-                await two.save();
-                console.log('\x1b[42m%s \x1b[0m', '[matt] thing', two);
+                // await two.save();
+                // console.log('\x1b[42m%s \x1b[0m', '[matt] thing', two);
 
-                // boardgameObject[parsedItem.objectId] = { ...parsedItem };
+                boardgameObject[parsedItem.objectId] = { ...parsedItem };
             }
             count = count + 1;
         }
-        // console.log('\x1b[42m%s \x1b[0m', '[matt] boargameObject', boardgameObject);
+
+        console.log('\x1b[42m%s \x1b[0m', '[matt] boargameObject', boardgameObject);
     } catch (err) {
         console.log(jsonCollection, err);
         return new Error(err);

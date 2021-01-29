@@ -1,5 +1,3 @@
-import mongoose from 'mongoose';
-
 const bggUserSchema = new mongoose.Schema(
     {
         username: {
@@ -10,5 +8,3 @@ const bggUserSchema = new mongoose.Schema(
     },
     { timestamps: true },
 );
-
-export const BggUser = mongoose.model('BggUser', bggUserSchema);
