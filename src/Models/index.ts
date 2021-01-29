@@ -3,7 +3,7 @@ import { dbConnectionString } from '../../utils/envValues';
 import { BggUser } from './BggUser';
 import { BggBoardgameItem } from './BggBoardgameItem';
 
-const connectDb = () => {
+const connectDb: () => Promise<typeof mongoose> = () => {
     return mongoose.connect(dbConnectionString, {
         useNewUrlParser: true,
         useUnifiedTopology: true,

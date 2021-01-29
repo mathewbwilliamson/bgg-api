@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { Body, JsonController, Post } from 'routing-controllers';
 import { getCollection } from '../Services/CollectionService';
 

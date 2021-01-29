@@ -1,17 +1,17 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, model, Model } from 'mongoose';
 
-const bggBoardgameItem = new mongoose.Schema(
+export interface BoardGameItemDocument extends Document {
+    objectId: string;
+    name: string;
+    yearPublished: number;
+    image: string;
+    thumbnail: string;
+}
+
+export type BoardGameItemModel = Model<BoardGameItemDocument>;
+
+const BggBoardgameItemSchema = new mongoose.Schema<BoardGameItemDocument>(
     {
-        username: {
-            type: String,
-            unique: true,
-            required: true,
-        },
-        collectionId: {
-            type: String,
-            unique: true,
-            required: true,
-        },
         objectId: {
             type: String,
             unique: true,
@@ -22,10 +22,10 @@ const bggBoardgameItem = new mongoose.Schema(
         image: String,
         thumbnail: String,
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 
-export const BggBoardgameItem = mongoose.model(
+export const BggBoardgameItem = model<BoardGameItemDocument, BoardGameItemModel>(
     'BggBoardgameItem',
-    bggBoardgameItem
+    BggBoardgameItemSchema,
 );

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const bggCollection = new mongoose.Schema(
+const bggCollectionSchema = new mongoose.Schema(
     {
         username: {
             type: String,
@@ -8,7 +8,7 @@ const bggCollection = new mongoose.Schema(
             required: true,
         },
     },
-    { timestamps: true }
+    { timestamps: true },
 );
 
-export const BggCollection = mongoose.model('BggCollection', bggCollection);
+export const BggCollection = mongoose.model('BggCollection', bggCollectionSchema);

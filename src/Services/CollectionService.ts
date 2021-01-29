@@ -1,8 +1,9 @@
 import axios from 'axios';
 import parser, { X2jOptions } from 'fast-xml-parser';
 import he from 'he';
-import { BggBoardgameItem } from '../Models/BggBoardgameItem';
+import { BggBoardgameItem, BoardGameItemDocument } from '../Models/BggBoardgameItem';
 import { BoardGameItem } from '../../types/BoardGameItems';
+import { models } from 'mongoose';
 
 const xmlOptions: Partial<X2jOptions> = {
     attributeNamePrefix: '@_',
@@ -83,22 +84,52 @@ export const getCollection = async (username: string) => {
     }
 
     try {
-        jsonCollection.items.item.forEach(async (item: any, idx: number) => {
-            if (idx === 600 || idx === 50 || idx === 100 || idx === 200 || idx === 500) {
-                console.log('/////////////////////////////////////////////////////////////////////////');
-                console.log(idx, item);
-                console.log('PARSED ITEM', parseBoardgameItem(item));
-                console.log('RATING', item.stats.rating.ranks.rank);
-                const parsedItem = parseBoardgameItem(item);
-                const thing = new BggBoardgameItem({
-                    parsedItem,
-                });
-                await thing.save();
+        // jsonCollection.items.item.forEach(async (item: any, idx: number) => {
+        //     if (idx === 600 || idx === 50 || idx === 100 || idx === 200 || idx === 500) {
+        //         console.log('/////////////////////////////////////////////////////////////////////////');
+        //         // console.log(idx, item);
+        //         // console.log('PARSED ITEM', parseBoardgameItem(item));
+        //         // console.log('RATING', item.stats.rating.ranks.rank);
+        //         const parsedItem = parseBoardgameItem(item);
+        //         const two = new models.BggBoardgameItem({
+        //             objectId: parsedItem.objectId,
+        //             name: parsedItem.name,
+        //             yearPublished: parsedItem.yearPublished,
+        //             image: parsedItem.image,
+        //             thumbnail: parsedItem.thumbnail,
+        //         });
 
-                boardgameObject[parsedItem.objectId] = { ...parsedItem };
+        //         await two.save();
+        //         console.log('\x1b[42m%s \x1b[0m', '[matt] thing', two);
+
+        //         boardgameObject[parsedItem.objectId] = { ...parsedItem };
+        //     }
+        // });
+        let count = 0;
+        for (const item of jsonCollection.items.item) {
+            if (count === 600 || count === 50 || count === 100 || count === 200 || count === 500) {
+                console.log('/////////////////////////////////////////////////////////////////////////');
+                // console.log(count, item);
+                // console.log('PARSED ITEM', parseBoardgameItem(item));
+                // console.log('RATING', item.stats.rating.ranks.rank);
+                const parsedItem = parseBoardgameItem(item);
+                console.log('\x1b[41m%s \x1b[0m', '[matt] parsedItem', parsedItem);
+                const two = await new models.BggBoardgameItem({
+                    objectId: parsedItem.objectId,
+                    name: parsedItem.name,
+                    yearPublished: parsedItem.yearPublished,
+                    image: parsedItem.image,
+                    thumbnail: parsedItem.thumbnail,
+                });
+
+                await two.save();
+                console.log('\x1b[42m%s \x1b[0m', '[matt] thing', two);
+
+                // boardgameObject[parsedItem.objectId] = { ...parsedItem };
             }
-        });
-        console.log('\x1b[42m%s \x1b[0m', '[matt] boargameObject', boardgameObject);
+            count = count + 1;
+        }
+        // console.log('\x1b[42m%s \x1b[0m', '[matt] boargameObject', boardgameObject);
     } catch (err) {
         console.log(jsonCollection, err);
         return new Error(err);

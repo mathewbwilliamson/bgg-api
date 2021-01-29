@@ -1,15 +1,14 @@
 import mongoose from 'mongoose';
- 
+
 const bggUserSchema = new mongoose.Schema(
-  {
-    username: {
-      type: String,
-      unique: true,
-      required: true,
+    {
+        username: {
+            type: String,
+            unique: true,
+            required: true,
+        },
     },
-  },
-  { timestamps: true },
+    { timestamps: true },
 );
- 
+
 export const BggUser = mongoose.model('BggUser', bggUserSchema);
- 
