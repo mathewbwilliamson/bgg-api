@@ -7,6 +7,20 @@ const bggBoardgameItem = new mongoose.Schema(
             unique: true,
             required: true,
         },
+        collectionId: {
+            type: String,
+            unique: true,
+            required: true,
+        },
+        objectId: {
+            type: String,
+            unique: true,
+            required: true,
+        },
+        name: String,
+        yearPublished: Number,
+        image: String,
+        thumbnail: String,
     },
     { timestamps: true }
 );
