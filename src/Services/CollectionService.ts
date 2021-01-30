@@ -86,25 +86,13 @@ export const getCollection = async (username: string) => {
         // [matt] Need to do retries for this. Maybe a redis job??
         return new Error('They are timing us out');
     }
+    // [matt] Remove the count when closer to being done, we want ALL the items in the db
+    let count = 0;
 
     try {
-        const boardGameArray: any[] = [];
-        let count = 0;
         for (const item of jsonCollection.items.item) {
-            if (count === 600 || count === 50 || count === 100 || count === 200 || count === 500) {
-                console.log('/////////////////////////////////////////////////////////////////////////');
-                // console.log(count, item);
-                // console.log('PARSED ITEM', parseBoardgameItem(item));
-                // console.log('RATING', item.stats.rating.ranks.rank);
+            if (count < 31) {
                 const parsedItem = parseBoardgameItem(item);
-                boardGameArray.push({
-                    objectId: parsedItem.objectId,
-                    name: parsedItem.name,
-                    yearPublished: parsedItem.yearPublished,
-                    image: parsedItem.image,
-                    thumbnail: parsedItem.thumbnail,
-                });
-
                 const newBoardGameItemForDb = {
                     objectId: parsedItem.objectId,
                     image: parsedItem.image,
@@ -117,22 +105,25 @@ export const getCollection = async (username: string) => {
                 // Get the board game repository from TypeORM.
                 const boardGameItemRepo: Repository<BoardGameItemEntity> = getRepository(BoardGameItemEntity);
 
-                // Create our new BoardGame.
-                const boardgameItem: BoardGameItemEntity = boardGameItemRepo.create(newBoardGameItemForDb);
+                const foundItem = await boardGameItemRepo.findOne({ objectId: parsedItem.objectId });
+                console.log('\x1b[41m%s \x1b[0m', '[matt] foundItem', foundItem);
 
-                // Persist it to the database.
-                await boardGameItemRepo.save(boardgameItem);
+                if (!foundItem) {
+                    // Create our new BoardGame.
+                    const boardgameItem: BoardGameItemEntity = boardGameItemRepo.create(newBoardGameItemForDb);
+
+                    // Persist it to the database.
+                    await boardGameItemRepo.save(boardgameItem);
+                }
 
                 boardgameObject[parsedItem.objectId] = { ...parsedItem };
             }
             count = count + 1;
         }
-
-        console.log('\x1b[42m%s \x1b[0m', '[matt] boargameObject', boardgameObject);
     } catch (err) {
         console.log(jsonCollection, err);
         return new Error(err);
     }
 
-    return boardgameObject;
+    return { message: `${jsonCollection.items.item.length} (Actually ${count}) records added to the DB` };
 };
