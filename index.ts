@@ -4,28 +4,31 @@ import { NextFunction } from 'express';
 import { createExpressServer } from 'routing-controllers';
 import { CollectionController } from './src/Controllers/CollectionController';
 import dotenv from 'dotenv';
-import { createConnection } from 'typeorm';
+import { databaseConnection } from './utils/databaseConnect';
 
 dotenv.config();
 
-createConnection().then((connection) => {
-    const port = process.env.PORT || '8000';
+console.log('\x1b[41m%s \x1b[0m', '[matt] RIGHT');
+const port = process.env.PORT || '8000';
 
-    // creates express app, registers all controller routes and returns you express app instance
-    const app = createExpressServer({
-        cors: true,
-        controllers: [CollectionController], // we specify controllers we want to use
-    });
-
-    app.use(bodyParser.urlencoded({ extended: true }));
-
-    app.use((err: Error, req: Express.Request, res: any, next: NextFunction) => {
-        if (res.headersSent) {
-            return next(err);
-        }
-        res.status(500);
-        console.log('\x1b[43m%s \x1b[0m', 'ERROR', err);
-    });
-
-    app.listen(port, () => console.log(`App listening on port ${port}!`));
+// creates express app, registers all controller routes and returns you express app instance
+const app = createExpressServer({
+    cors: true,
+    controllers: [CollectionController], // we specify controllers we want to use
 });
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use((err: Error, req: Express.Request, res: any, next: NextFunction) => {
+    if (res.headersSent) {
+        return next(err);
+    }
+    res.status(500);
+    console.log('\x1b[43m%s \x1b[0m', 'ERROR', err);
+});
+
+databaseConnection
+    .then(() => app.listen(port, () => console.log(`App listening on port ${port}!`)))
+    .catch((err) => {
+        console.error('\x1b[41m%s \x1b[0m', '[matt] err', err);
+    });

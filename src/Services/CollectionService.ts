@@ -1,7 +1,9 @@
 import axios from 'axios';
 import parser, { X2jOptions } from 'fast-xml-parser';
 import he from 'he';
+import { getRepository, Repository } from 'typeorm';
 import { BoardGameItem } from '../../types/BoardGameItems';
+import { BoardGameItemEntity } from '../Models/BoardGameItem.entity';
 
 const xmlOptions: Partial<X2jOptions> = {
     attributeNamePrefix: '@_',
@@ -67,7 +69,9 @@ const parseBoardgameItem = (item: any) => {
 };
 
 export const getCollection = async (username: string) => {
+    console.log('\x1b[44m%s \x1b[0m', '[matt] HERE 1');
     const collectionXml = await getCollectionFromBGG(username);
+    console.log('\x1b[44m%s \x1b[0m', '[matt] HERE 2 ');
     const boardgameObject: any = {};
 
     const jsonCollection = parser.parse(collectionXml, xmlOptions) as any;
@@ -82,27 +86,6 @@ export const getCollection = async (username: string) => {
     }
 
     try {
-        // jsonCollection.items.item.forEach(async (item: any, idx: number) => {
-        //     if (idx === 600 || idx === 50 || idx === 100 || idx === 200 || idx === 500) {
-        //         console.log('/////////////////////////////////////////////////////////////////////////');
-        //         // console.log(idx, item);
-        //         // console.log('PARSED ITEM', parseBoardgameItem(item));
-        //         // console.log('RATING', item.stats.rating.ranks.rank);
-        //         const parsedItem = parseBoardgameItem(item);
-        //         const two = new models.BggBoardgameItem({
-        //             objectId: parsedItem.objectId,
-        //             name: parsedItem.name,
-        //             yearPublished: parsedItem.yearPublished,
-        //             image: parsedItem.image,
-        //             thumbnail: parsedItem.thumbnail,
-        //         });
-
-        //         await two.save();
-        //         console.log('\x1b[42m%s \x1b[0m', '[matt] thing', two);
-
-        //         boardgameObject[parsedItem.objectId] = { ...parsedItem };
-        //     }
-        // });
         const boardGameArray: any[] = [];
         let count = 0;
         for (const item of jsonCollection.items.item) {
@@ -119,18 +102,24 @@ export const getCollection = async (username: string) => {
                     image: parsedItem.image,
                     thumbnail: parsedItem.thumbnail,
                 });
-                // console.log('\x1b[41m%s \x1b[0m', '[matt] parsedItem', parsedItem);
-                // const two = await new models.BggBoardgameItem({
-                //     objectId: parsedItem.objectId,
-                //     name: parsedItem.name,
-                //     yearPublished: parsedItem.yearPublished,
-                //     image: parsedItem.image,
-                //     thumbnail: parsedItem.thumbnail,
-                // });
-                // two.collection.save();
 
-                // await two.save();
-                // console.log('\x1b[42m%s \x1b[0m', '[matt] thing', two);
+                const newBoardGameItemForDb = {
+                    objectId: parsedItem.objectId,
+                    image: parsedItem.image,
+                    name: parsedItem.name,
+                    status: parsedItem.status,
+                    thumbnail: parsedItem.thumbnail,
+                    yearPublished: parsedItem.yearPublished,
+                };
+
+                // Get the board game repository from TypeORM.
+                const boardGameItemRepo: Repository<BoardGameItemEntity> = getRepository(BoardGameItemEntity);
+
+                // Create our new BoardGame.
+                const boardgameItem: BoardGameItemEntity = boardGameItemRepo.create(newBoardGameItemForDb);
+
+                // Persist it to the database.
+                await boardGameItemRepo.save(boardgameItem);
 
                 boardgameObject[parsedItem.objectId] = { ...parsedItem };
             }
