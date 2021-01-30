@@ -68,7 +68,7 @@ const parseBoardgameItem = (item: any) => {
     } as BoardGameItem;
 };
 
-export const getCollection = async (username: string) => {
+export const loadItemsFromCollectionIntoDb = async (username: string) => {
     const collectionXml = await getCollectionFromBGG(username);
     const boardgameObject: any = {};
 
@@ -86,6 +86,7 @@ export const getCollection = async (username: string) => {
         // [matt] Need to do retries for this. Maybe a redis job??
         return new Error('They are timing us out');
     }
+
     // [matt] Remove the count when closer to being done, we want ALL the items in the db
     let count = 0;
 
@@ -125,5 +126,5 @@ export const getCollection = async (username: string) => {
         return new Error(err);
     }
 
-    return { message: `${jsonCollection.items.item.length} (Actually ${count}) records added to the DB` };
+    return { message: `${jsonCollection.items.item.length} records added to the DB` };
 };
