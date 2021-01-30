@@ -69,18 +69,20 @@ const parseBoardgameItem = (item: any) => {
 };
 
 export const getCollection = async (username: string) => {
-    console.log('\x1b[44m%s \x1b[0m', '[matt] HERE 1');
     const collectionXml = await getCollectionFromBGG(username);
-    console.log('\x1b[44m%s \x1b[0m', '[matt] HERE 2 ');
     const boardgameObject: any = {};
 
     const jsonCollection = parser.parse(collectionXml, xmlOptions) as any;
 
     if (!!jsonCollection?.errors?.error) {
+        console.log('\x1b[44m%s \x1b[0m', '[matt] HERE 3 ERRPR ');
+
         throw new Error(jsonCollection?.errors?.error?.message);
     }
 
     if (jsonCollection && !!jsonCollection?.message) {
+        console.log('\x1b[44m%s \x1b[0m', '[matt] MESSAGE');
+
         // [matt] Need to do retries for this. Maybe a redis job??
         return new Error('They are timing us out');
     }
