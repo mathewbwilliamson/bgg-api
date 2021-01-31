@@ -1,13 +1,5 @@
 import { Entity, ObjectID, ObjectIdColumn, Column } from 'typeorm';
 
-interface BoardGameItemInitializer {
-    objectId: string;
-    name: string;
-    yearPublished: number;
-    image: string;
-    thumbnail: string;
-    status: string;
-}
 @Entity()
 export class BoardGameItemEntity {
     @ObjectIdColumn()

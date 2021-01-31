@@ -107,7 +107,6 @@ export const loadItemsFromCollectionIntoDb = async (username: string) => {
                 const boardGameItemRepo: Repository<BoardGameItemEntity> = getRepository(BoardGameItemEntity);
 
                 const foundItem = await boardGameItemRepo.findOne({ objectId: parsedItem.objectId });
-                console.log('\x1b[41m%s \x1b[0m', '[matt] foundItem', foundItem);
 
                 if (!foundItem) {
                     // Create our new BoardGame.
