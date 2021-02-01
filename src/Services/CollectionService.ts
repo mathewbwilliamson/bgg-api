@@ -3,7 +3,7 @@ import parser, { X2jOptions } from 'fast-xml-parser';
 import he from 'he';
 import { BoardGameItem } from '../../types/BoardGameItems';
 import { RawBoardGameItem } from '../../types/RawBoardGameItems';
-import { NewBoardGameItemEntity } from '../Models/BoardGameItem.entity';
+import { NewBoardGameItemModel } from '../Models/BoardGameItem.entity';
 import { collectionRepo } from '../../index';
 
 const xmlOptions: Partial<X2jOptions> = {
@@ -106,12 +106,20 @@ export const loadItemsFromCollectionIntoDb = async (username: string) => {
             if (count < 31) {
                 const parsedItem = parseBoardgameItem(item);
                 console.log('\x1b[42m%s \x1b[0m', '[matt] parsedItem', parsedItem);
-                const newBoardGameItemForDb: NewBoardGameItemEntity = {
+                const newBoardGameItemForDb: NewBoardGameItemModel = {
                     objectId: parsedItem.objectId,
                     image: parsedItem.image,
                     name: parsedItem.name,
                     thumbnail: parsedItem.thumbnail,
                     yearPublished: parsedItem.yearPublished,
+                    stats: {
+                        minPlayers: parsedItem.stats.minPlayers,
+                        maxPlayers: parsedItem.stats.maxPlayers,
+                        minPlayTime: parsedItem.stats.minPlayTime,
+                        maxPlayTime: parsedItem.stats.maxPlayTime,
+                        playingTime: parsedItem.stats.playingTime,
+                        playersWhoOwnThisGame: parsedItem.stats.playersWhoOwnThisGame,
+                    },
                 };
 
                 collectionRepo.upsertBoardGameItem(newBoardGameItemForDb);

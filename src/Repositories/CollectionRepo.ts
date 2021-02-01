@@ -1,8 +1,8 @@
-import { BoardGameItemEntity, NewBoardGameItemEntity } from '../Models/BoardGameItem.entity';
+import { BoardGameItemEntity, NewBoardGameItemModel } from '../Models/BoardGameItem.entity';
 import { Repository, getRepository } from 'typeorm';
 
 export class CollectionRepo {
-    upsertBoardGameItem = async (newItem: NewBoardGameItemEntity) => {
+    upsertBoardGameItem = async (newItem: NewBoardGameItemModel) => {
         const boardGameItemRepo: Repository<BoardGameItemEntity> = getRepository(BoardGameItemEntity);
         const foundItem = await boardGameItemRepo.findOne({ objectId: newItem.objectId });
 

@@ -1,14 +1,16 @@
 import { Entity, ObjectID, ObjectIdColumn, Column } from 'typeorm';
+import { BoardGameItemStatsEntity, BoardGameItemStatsModel } from './BoardGameItemStats.entity';
 
-export interface NewBoardGameItemEntity {
+export interface NewBoardGameItemModel {
     objectId: string;
     name: string;
     yearPublished: number;
     image: string;
     thumbnail: string;
+    stats: BoardGameItemStatsModel;
 }
 
-export interface BoardGameItemEntity extends NewBoardGameItemEntity {
+export interface BoardGameItemModel extends NewBoardGameItemModel {
     id: ObjectID;
 }
 @Entity()
@@ -30,4 +32,7 @@ export class BoardGameItemEntity {
 
     @Column()
     thumbnail: string;
+
+    @Column((type) => BoardGameItemStatsEntity)
+    stats: BoardGameItemStatsEntity;
 }
