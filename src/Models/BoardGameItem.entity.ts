@@ -1,5 +1,17 @@
 import { Entity, ObjectID, ObjectIdColumn, Column } from 'typeorm';
 
+export interface NewBoardGameItemEntity {
+    objectId: string;
+    name: string;
+    yearPublished: number;
+    image: string;
+    thumbnail: string;
+    status: string;
+}
+
+export interface BoardGameItemEntity extends NewBoardGameItemEntity {
+    id: ObjectID;
+}
 @Entity()
 export class BoardGameItemEntity {
     @ObjectIdColumn()

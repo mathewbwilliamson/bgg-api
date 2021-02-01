@@ -5,6 +5,7 @@ import { createExpressServer } from 'routing-controllers';
 import { CollectionController } from './src/Controllers/CollectionController';
 import dotenv from 'dotenv';
 import { databaseConnection } from './utils/databaseConnect';
+import { CollectionRepo } from './src/Repositories/CollectionRepo';
 
 dotenv.config();
 
@@ -16,6 +17,8 @@ const app = createExpressServer({
     cors: true,
     controllers: [CollectionController], // we specify controllers we want to use
 });
+
+export const collectionRepo = new CollectionRepo();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 

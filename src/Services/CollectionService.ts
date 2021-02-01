@@ -1,9 +1,9 @@
 import axios from 'axios';
 import parser, { X2jOptions } from 'fast-xml-parser';
 import he from 'he';
-import { getRepository, Repository } from 'typeorm';
 import { BoardGameItem } from '../../types/BoardGameItems';
-import { BoardGameItemEntity } from '../Models/BoardGameItem.entity';
+import { NewBoardGameItemEntity } from '../Models/BoardGameItem.entity';
+import { collectionRepo } from '../../index';
 
 const xmlOptions: Partial<X2jOptions> = {
     attributeNamePrefix: '@_',
@@ -94,7 +94,8 @@ export const loadItemsFromCollectionIntoDb = async (username: string) => {
         for (const item of jsonCollection.items.item) {
             if (count < 31) {
                 const parsedItem = parseBoardgameItem(item);
-                const newBoardGameItemForDb = {
+                console.log('\x1b[42m%s \x1b[0m', '[matt] parsedItem', parsedItem);
+                const newBoardGameItemForDb: NewBoardGameItemEntity = {
                     objectId: parsedItem.objectId,
                     image: parsedItem.image,
                     name: parsedItem.name,
@@ -103,18 +104,7 @@ export const loadItemsFromCollectionIntoDb = async (username: string) => {
                     yearPublished: parsedItem.yearPublished,
                 };
 
-                // Get the board game repository from TypeORM.
-                const boardGameItemRepo: Repository<BoardGameItemEntity> = getRepository(BoardGameItemEntity);
-
-                const foundItem = await boardGameItemRepo.findOne({ objectId: parsedItem.objectId });
-
-                if (!foundItem) {
-                    // Create our new BoardGame.
-                    const boardgameItem: BoardGameItemEntity = boardGameItemRepo.create(newBoardGameItemForDb);
-
-                    // Persist it to the database.
-                    await boardGameItemRepo.save(boardgameItem);
-                }
+                collectionRepo.upsertBoardGameItem(newBoardGameItemForDb);
 
                 boardgameObject[parsedItem.objectId] = { ...parsedItem };
             }
