@@ -12,6 +12,9 @@ export class CollectionRepo {
 
             // Persist it to the database.
             await boardGameItemRepo.save(boardgameItem);
+        } else {
+            const updatedBoardGameItem = await boardGameItemRepo.merge(foundItem, newItem);
+            await boardGameItemRepo.save(updatedBoardGameItem);
         }
     };
 }
