@@ -112,6 +112,8 @@ export const loadItemsFromCollectionIntoDb = async (username: string) => {
                     name: parsedItem.name,
                     thumbnail: parsedItem.thumbnail,
                     yearPublished: parsedItem.yearPublished,
+                    createdAt: String(new Date()),
+                    updatedAt: String(new Date()),
                     stats: {
                         minPlayers: parsedItem.stats.minPlayers,
                         maxPlayers: parsedItem.stats.maxPlayers,

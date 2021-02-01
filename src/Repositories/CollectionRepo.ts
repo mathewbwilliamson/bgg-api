@@ -13,6 +13,8 @@ export class CollectionRepo {
             // Persist it to the database.
             await boardGameItemRepo.save(boardgameItem);
         } else {
+            newItem.createdAt = foundItem.createdAt;
+
             const updatedBoardGameItem = await boardGameItemRepo.merge(foundItem, newItem);
             await boardGameItemRepo.save(updatedBoardGameItem);
         }

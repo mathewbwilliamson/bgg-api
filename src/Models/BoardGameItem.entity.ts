@@ -8,6 +8,8 @@ export interface NewBoardGameItemModel {
     yearPublished: number;
     image: string;
     thumbnail: string;
+    createdAt: string;
+    updatedAt: string;
     stats: BoardGameItemStatsModel;
     ratingStats: BoardGameItemRatingsModel;
 }
@@ -34,6 +36,12 @@ export class BoardGameItemEntity {
 
     @Column()
     thumbnail: string;
+
+    @Column()
+    createdAt: string;
+
+    @Column()
+    updatedAt: string;
 
     @Column((type) => BoardGameItemStatsEntity)
     stats: BoardGameItemStatsEntity;
