@@ -1,4 +1,5 @@
 import { Entity, ObjectID, ObjectIdColumn, Column } from 'typeorm';
+import { BoardGameItemRatingsEntity, BoardGameItemRatingsModel } from './BoardGameItemRatings.entity';
 import { BoardGameItemStatsEntity, BoardGameItemStatsModel } from './BoardGameItemStats.entity';
 
 export interface NewBoardGameItemModel {
@@ -8,6 +9,7 @@ export interface NewBoardGameItemModel {
     image: string;
     thumbnail: string;
     stats: BoardGameItemStatsModel;
+    ratingStats: BoardGameItemRatingsModel;
 }
 
 export interface BoardGameItemModel extends NewBoardGameItemModel {
@@ -35,4 +37,7 @@ export class BoardGameItemEntity {
 
     @Column((type) => BoardGameItemStatsEntity)
     stats: BoardGameItemStatsEntity;
+
+    @Column((type) => BoardGameItemRatingsEntity)
+    ratingStats: BoardGameItemRatingsEntity;
 }

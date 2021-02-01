@@ -105,7 +105,7 @@ export const loadItemsFromCollectionIntoDb = async (username: string) => {
         for (const item of jsonCollection.items.item) {
             if (count < 31) {
                 const parsedItem = parseBoardgameItem(item);
-                console.log('\x1b[42m%s \x1b[0m', '[matt] parsedItem', parsedItem);
+                console.log('\x1b[42m%s \x1b[0m', '[matt] item', item.stats.rating);
                 const newBoardGameItemForDb: NewBoardGameItemModel = {
                     objectId: parsedItem.objectId,
                     image: parsedItem.image,
@@ -119,6 +119,13 @@ export const loadItemsFromCollectionIntoDb = async (username: string) => {
                         maxPlayTime: parsedItem.stats.maxPlayTime,
                         playingTime: parsedItem.stats.playingTime,
                         playersWhoOwnThisGame: parsedItem.stats.playersWhoOwnThisGame,
+                    },
+                    ratingStats: {
+                        usersRated: parsedItem.ratingStats.usersRated,
+                        average: parsedItem.ratingStats.average,
+                        bayesAverage: parsedItem.ratingStats.bayesAverage,
+                        stdDeviation: parsedItem.ratingStats.stdDeviation,
+                        median: parsedItem.ratingStats.median,
                     },
                 };
 

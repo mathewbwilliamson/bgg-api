@@ -18,7 +18,7 @@ export interface BoardGameItem {
         playersWhoOwnThisGame: number;
     };
     ratingStats: {
-        // collectionRating: string | number;
+        // collectionRating: string | number; ?????
         usersRated: string;
         average: string;
         bayesAverage: string;
