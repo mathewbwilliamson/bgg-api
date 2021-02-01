@@ -26,7 +26,17 @@ export interface BoardGameItem {
         median: string;
         ranks?: any;
     };
-    status: string;
+    status: {
+        owned: number;
+        prevOwned: number;
+        forTrade: number;
+        want: number;
+        wantToPlay: number;
+        wantToBuy: number;
+        wishlist: number;
+        preOrdered: number;
+        lastModified: string;
+    };
     numplays: number;
     version?: {
         item: {

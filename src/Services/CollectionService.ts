@@ -2,6 +2,7 @@ import axios from 'axios';
 import parser, { X2jOptions } from 'fast-xml-parser';
 import he from 'he';
 import { BoardGameItem } from '../../types/BoardGameItems';
+import { RawBoardGameItem } from '../../types/RawBoardGameItems';
 import { NewBoardGameItemEntity } from '../Models/BoardGameItem.entity';
 import { collectionRepo } from '../../index';
 
@@ -36,7 +37,7 @@ const getCollectionFromBGG = async (username: string) => {
     }
 };
 
-const parseBoardgameItem = (item: any) => {
+const parseBoardgameItem = (item: RawBoardGameItem) => {
     return {
         objectId: item.attr['@_objectid'],
         collectionId: item.attr['@_collid'],
@@ -63,8 +64,18 @@ const parseBoardgameItem = (item: any) => {
             stdDeviation: item.stats.rating.stddev.attr['@_value'],
             median: item.stats.rating.median.attr['@_value'],
         },
-        status: 'NONE',
-        numplays: 0,
+        status: {
+            owned: item.status.attr['@_own'],
+            prevOwned: item.status.attr['@_prevowned'],
+            forTrade: item.status.attr['@_fortrade'],
+            want: item.status.attr['@_want'],
+            wantToPlay: item.status.attr['@_wanttoplay'],
+            wantToBuy: item.status.attr['@_wanttobuy'],
+            wishlist: item.status.attr['@_wishlist'],
+            preOrdered: item.status.attr['@_preordered'],
+            lastModified: item.status.attr['@_lastmodified'],
+        },
+        numplays: item.numplays,
     } as BoardGameItem;
 };
 
@@ -99,7 +110,6 @@ export const loadItemsFromCollectionIntoDb = async (username: string) => {
                     objectId: parsedItem.objectId,
                     image: parsedItem.image,
                     name: parsedItem.name,
-                    status: parsedItem.status,
                     thumbnail: parsedItem.thumbnail,
                     yearPublished: parsedItem.yearPublished,
                 };

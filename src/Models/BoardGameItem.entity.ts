@@ -6,7 +6,6 @@ export interface NewBoardGameItemEntity {
     yearPublished: number;
     image: string;
     thumbnail: string;
-    status: string;
 }
 
 export interface BoardGameItemEntity extends NewBoardGameItemEntity {
@@ -31,7 +30,4 @@ export class BoardGameItemEntity {
 
     @Column()
     thumbnail: string;
-
-    @Column()
-    status: string;
 }

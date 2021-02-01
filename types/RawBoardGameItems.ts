@@ -37,12 +37,12 @@ export interface RawBoardGameItem {
     thumbnail: string;
     stats: {
         attr: {
-            '@_minplayers': 2;
-            '@_maxplayers': 4;
-            '@_minplaytime': 20;
-            '@_maxplaytime': 20;
-            '@_playingtime': 20;
-            '@_numowned': 3212;
+            '@_minplayers': number;
+            '@_maxplayers': number;
+            '@_minplaytime': number;
+            '@_maxplaytime': number;
+            '@_playingtime': number;
+            '@_numowned': number;
         };
         rating: {
             attr: RawAttrValue;

@@ -9,7 +9,6 @@ import { CollectionRepo } from './src/Repositories/CollectionRepo';
 
 dotenv.config();
 
-console.log('\x1b[41m%s \x1b[0m', '[matt] RIGHT');
 const port = process.env.PORT || '8000';
 
 // creates express app, registers all controller routes and returns you express app instance
