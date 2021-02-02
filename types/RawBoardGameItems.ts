@@ -1,11 +1,17 @@
 export interface JsonCollection {
-    items: { item: RawBoardGameItem[] };
+    items: { item: RawBoardGameItemFromCollection[] };
 }
+
+export interface JsonCollectionSingleItem {
+    items: { item: RawBoardGameItemFromCollection[] };
+}
+
 export interface RawAttrValue {
     '@_value'?: number | string;
     '@_type'?: string;
     '@_id'?: number | string;
     '@_name'?: string;
+    '@_sortindex'?: string;
 }
 
 export interface RawRanksItem extends RawAttrValue {
@@ -21,7 +27,7 @@ export interface RawLink {
     attr: RawAttrValue;
 }
 
-export interface RawBoardGameItem {
+export interface RawBoardGameItemFromCollection {
     attr: {
         '@_objecttype': string;
         '@_objectid': string;
@@ -51,7 +57,7 @@ export interface RawBoardGameItem {
             bayesaverage: { attr: RawAttrValue };
             stddev: { attr: RawAttrValue };
             median: { attr: RawAttrValue };
-            ranks: RawRank[];
+            ranks: RawRank | RawRank[];
         };
     };
     status: {
@@ -87,6 +93,41 @@ export interface RawBoardGameItem {
             length: { attr: RawAttrValue };
             depth: { attr: RawAttrValue };
             weight: { attr: RawAttrValue };
+        };
+    };
+}
+export interface RawBoardGameItem {
+    attr: any;
+    thumbnail: string;
+    image: string;
+    name: RawAttrValue | RawAttrValue[];
+    description: string;
+    yearpublished: { attr: RawAttrValue };
+    minplayers: { attr: RawAttrValue };
+    maxplayers: { attr: RawAttrValue };
+    poll: any;
+    playingtime: { attr: RawAttrValue };
+    minplaytime: { attr: RawAttrValue };
+    maxplaytime: { attr: RawAttrValue };
+    minage: { attr: RawAttrValue };
+    link: { attr: RawAttrValue };
+    videos: { attr: { '@_total': number }; video: RawAttrValue[] };
+    statistics: {
+        attr: { '@_page': number };
+        ratings: {
+            usersrated: RawAttrValue;
+            average: RawAttrValue;
+            bayesaverage: RawAttrValue;
+            ranks: RawRank | RawRank[];
+            stddev: RawAttrValue;
+            median: RawAttrValue;
+            owned: RawAttrValue;
+            trading: RawAttrValue;
+            wanting: RawAttrValue;
+            wishing: RawAttrValue;
+            numcomments: RawAttrValue;
+            numweights: RawAttrValue;
+            averageweight: RawAttrValue;
         };
     };
 }

@@ -1,12 +1,10 @@
-import parser, { X2jOptions } from 'fast-xml-parser';
-import he from 'he';
 import { BoardGameItem } from '../../types/BoardGameItems';
-import { RawBoardGameItem } from '../../types/RawBoardGameItems';
+import { RawBoardGameItemFromCollection } from '../../types/RawBoardGameItems';
 import { NewBoardGameItemModel } from '../Models/BoardGameItem.entity';
 import { collectionRepo } from '../../index';
 import { getCollectionFromBGG, getSingleBoardGameFromBGG } from './BoardGameGeekService';
 
-const parseBoardgameItem = (item: RawBoardGameItem) => {
+const parseBoardgameItemFromCollection = (item: RawBoardGameItemFromCollection) => {
     return {
         objectId: item.attr['@_objectid'],
         collectionId: item.attr['@_collid'],
@@ -84,10 +82,10 @@ export const loadItemsFromCollectionIntoDb = async (username: string) => {
     try {
         for (const item of fullCollection.items.item) {
             if (count < 31) {
-                const parsedItem = parseBoardgameItem(item);
-                const thing = await getSingleBoardGameFromBGG([parsedItem.objectId]);
+                const parsedItem = parseBoardgameItemFromCollection(item);
+                const thing = (await getSingleBoardGameFromBGG([parsedItem.objectId])) as any;
 
-                console.log('\x1b[41m%s \x1b[0m', '[matt] thing', thing);
+                console.log('\x1b[41m%s \x1b[0m', '[matt] thing', thing.items.item.poll);
                 // console.log('\x1b[42m%s \x1b[0m', '[matt] item', item);
                 const newBoardGameItemForDb: NewBoardGameItemModel = transformBoardgameItemToDbFormat(parsedItem);
 

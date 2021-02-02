@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { json } from 'body-parser';
 import parser, { X2jOptions } from 'fast-xml-parser';
 import he from 'he';
+import { JsonCollection, JsonCollectionSingleItem } from '../../types/RawBoardGameItems';
 
 const xmlOptions: Partial<X2jOptions> = {
     attributeNamePrefix: '@_',
@@ -49,7 +49,7 @@ export const getCollectionFromBGG = async (username: string) => {
             )
         ).data;
 
-        return parseXML(response);
+        return parseXML(response) as JsonCollection;
     } catch (err) {
         throw new Error(err);
     }
@@ -63,7 +63,7 @@ export const getSingleBoardGameFromBGG = async (gameIds: string[]) => {
             await axios.get<string>(`https://www.boardgamegeek.com/xmlapi2/thing?id=${idsToSend}&videos=1&stats=1`)
         ).data;
 
-        return parseXML(response);
+        return parseXML(response) as JsonCollectionSingleItem;
     } catch (err) {
         throw new Error(err);
     }
