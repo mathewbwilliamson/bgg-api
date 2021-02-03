@@ -3,7 +3,7 @@ export interface JsonCollection {
 }
 
 export interface JsonCollectionSingleItem {
-    items: { item: RawBoardGameItemFromCollection[] };
+    items: { item: RawBoardGameItem };
 }
 
 export interface RawAttrValue {
@@ -23,7 +23,7 @@ export interface RawRank {
     attr: RawRanksItem;
 }
 
-export interface RawLink {
+export interface AttrObj {
     attr: RawAttrValue;
 }
 
@@ -79,7 +79,7 @@ export interface RawBoardGameItemFromCollection {
             attr: RawAttrValue;
             image: string;
             thumbnail: string;
-            link: RawLink[];
+            link: AttrObj[];
             name: {
                 attr: {
                     '@_type': string;
@@ -97,37 +97,37 @@ export interface RawBoardGameItemFromCollection {
     };
 }
 export interface RawBoardGameItem {
-    attr: any;
+    attr: RawAttrValue;
     thumbnail: string;
     image: string;
-    name: RawAttrValue | RawAttrValue[];
+    name: AttrObj | AttrObj[];
     description: string;
-    yearpublished: { attr: RawAttrValue };
-    minplayers: { attr: RawAttrValue };
-    maxplayers: { attr: RawAttrValue };
+    yearpublished: AttrObj;
+    minplayers: AttrObj;
+    maxplayers: AttrObj;
     poll: any;
-    playingtime: { attr: RawAttrValue };
-    minplaytime: { attr: RawAttrValue };
-    maxplaytime: { attr: RawAttrValue };
-    minage: { attr: RawAttrValue };
-    link: { attr: RawAttrValue };
+    playingtime: AttrObj;
+    minplaytime: AttrObj;
+    maxplaytime: AttrObj;
+    minage: AttrObj;
+    link: AttrObj;
     videos: { attr: { '@_total': number }; video: RawAttrValue[] };
     statistics: {
         attr: { '@_page': number };
         ratings: {
-            usersrated: RawAttrValue;
-            average: RawAttrValue;
-            bayesaverage: RawAttrValue;
+            usersrated: AttrObj;
+            average: AttrObj;
+            bayesaverage: AttrObj;
             ranks: RawRank | RawRank[];
-            stddev: RawAttrValue;
-            median: RawAttrValue;
-            owned: RawAttrValue;
-            trading: RawAttrValue;
-            wanting: RawAttrValue;
-            wishing: RawAttrValue;
-            numcomments: RawAttrValue;
-            numweights: RawAttrValue;
-            averageweight: RawAttrValue;
+            stddev: AttrObj;
+            median: AttrObj;
+            owned: AttrObj;
+            trading: AttrObj;
+            wanting: AttrObj;
+            wishing: AttrObj;
+            numcomments: AttrObj;
+            numweights: AttrObj;
+            averageweight: AttrObj;
         };
     };
 }

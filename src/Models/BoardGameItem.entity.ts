@@ -2,9 +2,12 @@ import { Entity, ObjectID, ObjectIdColumn, Column } from 'typeorm';
 import { BoardGameItemRatingsEntity, BoardGameItemRatingsModel } from './BoardGameItemRatings.entity';
 import { BoardGameItemStatsEntity, BoardGameItemStatsModel } from './BoardGameItemStats.entity';
 
+export type NewBoardGameItemFromCollection = Omit<NewBoardGameItemModel, 'description' | 'ratingStats'>;
+
 export interface NewBoardGameItemModel {
     objectId: string;
     name: string;
+    description: string;
     yearPublished: number;
     image: string;
     thumbnail: string;
@@ -27,6 +30,9 @@ export class BoardGameItemEntity {
 
     @Column()
     name: string;
+
+    @Column()
+    description: string;
 
     @Column()
     yearPublished: number;

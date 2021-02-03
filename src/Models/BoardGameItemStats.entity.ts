@@ -25,22 +25,11 @@ export class BoardGameItemStatsEntity {
     @Column()
     playingTime: number;
 
-    @Column()
-    playersWhoOwnThisGame: number;
-
-    constructor(
-        minPlayers: number,
-        maxPlayers: number,
-        minPlayTime: number,
-        maxPlayTime: number,
-        playingTime: number,
-        playersWhoOwnThisGame: number,
-    ) {
+    constructor(minPlayers: number, maxPlayers: number, minPlayTime: number, maxPlayTime: number, playingTime: number) {
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
         this.minPlayTime = minPlayTime;
         this.maxPlayTime = maxPlayTime;
         this.playingTime = playingTime;
-        this.playersWhoOwnThisGame = playersWhoOwnThisGame;
     }
 }

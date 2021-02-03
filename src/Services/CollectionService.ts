@@ -1,6 +1,6 @@
 import { BoardGameItem } from '../../types/BoardGameItems';
 import { RawBoardGameItemFromCollection } from '../../types/RawBoardGameItems';
-import { NewBoardGameItemModel } from '../Models/BoardGameItem.entity';
+import { NewBoardGameItemFromCollection, NewBoardGameItemModel } from '../Models/BoardGameItem.entity';
 import { collectionRepo } from '../../index';
 import { getCollectionFromBGG, getSingleBoardGameFromBGG } from './BoardGameGeekService';
 
@@ -46,7 +46,7 @@ const parseBoardgameItemFromCollection = (item: RawBoardGameItemFromCollection) 
     } as BoardGameItem;
 };
 
-const transformBoardgameItemToDbFormat: (item: BoardGameItem) => NewBoardGameItemModel = (item: BoardGameItem) => {
+const transformBoardgameItemToDbFormat: (item: BoardGameItem) => NewBoardGameItemFromCollection = (item) => {
     return {
         objectId: item.objectId,
         image: item.image,
@@ -81,13 +81,22 @@ export const loadItemsFromCollectionIntoDb = async (username: string) => {
 
     try {
         for (const item of fullCollection.items.item) {
-            if (count < 31) {
+            if (count < 4) {
                 const parsedItem = parseBoardgameItemFromCollection(item);
-                const thing = (await getSingleBoardGameFromBGG([parsedItem.objectId])) as any;
 
-                console.log('\x1b[41m%s \x1b[0m', '[matt] thing', thing.items.item.poll);
-                // console.log('\x1b[42m%s \x1b[0m', '[matt] item', item);
-                const newBoardGameItemForDb: NewBoardGameItemModel = transformBoardgameItemToDbFormat(parsedItem);
+                // [matt] NewBoardGameItemModel
+                const singleBoardGameItem = (await getSingleBoardGameFromBGG([
+                    parsedItem.objectId,
+                ])) as NewBoardGameItemModel;
+
+                const collectionBoardGameItem: NewBoardGameItemFromCollection = transformBoardgameItemToDbFormat(
+                    parsedItem,
+                );
+
+                const newBoardGameItemForDb: NewBoardGameItemModel = {
+                    ...collectionBoardGameItem,
+                    ...singleBoardGameItem,
+                };
 
                 collectionRepo.upsertBoardGameItem(newBoardGameItemForDb);
             }
